@@ -222,8 +222,7 @@
                                         <label class="form-check-label fw-bold" for="casco_nincs">Nincs casco</label>
                                     </div>
                                     <div class="mt-2 small text-muted">
-                                        A kockázatot te viseled, évente az autó értékének 4%-át biztosítatlan
-                                        kockázatként számoljuk.
+                                        A kockázatot te viseled, évente az autó értékének 4%-ának megfelelő kárt feltételezünk.
                                     </div>
                                 </div>
                             </div>
@@ -253,8 +252,7 @@
                                         </div>
                                     </div>
                                     <div class="mt-2 small text-muted">
-                                        Bizonyos károkra nem fizet, évente az autó értékének 1%-át biztosítatlan
-                                        kockázatként számoljuk.
+                                        Bizonyos károkra nem fizet, évente az autó értékének 1%-ának megfelelő ilyen kárt feltételezünk.
                                     </div>
                                 </div>
                             </div>
@@ -882,6 +880,7 @@
             const garazs_ertek = (document.getElementById('parkolas_garazs').checked) ? Number(document.getElementById('garazs_ertek').value) || 0 : 0;
             const futasteljesitmeny_evente = mostveszem ? Number(document.getElementById('futasteljesitmeny_evente').value) : futasteljesitmeny / evek;
             const statisztika_atlagos_futasteljesitmeny_evente = 20000;
+            const statisztika_ertekvesztes_km = 0.000002 // 1/km
             const futasteljesitmeny_szorzo = futasteljesitmeny_evente / statisztika_atlagos_futasteljesitmeny_evente;
 
             // egyszeri költségek
@@ -934,6 +933,7 @@
                 (orszagut_arany * orszagut_fogyasztas) +
                 (autopalya_arany * autopalya_fogyasztas)
             ) * uzemanyag_ar / 100;
+            const ertekvesztes_km = statisztika_ertekvesztes_km * mai_ertek;
 
             // Eredmények
             const karbantartas = (
@@ -975,6 +975,7 @@
                 olajcsere_km +
                 uzemanyag_km +
                 szerviz * 0.8 / (futasteljesitmeny_evente) + // szervizköltség 80%-a futásarányos
+                ertekvesztes_km +
                 biztositatlan_kockazat / futasteljesitmeny_evente;
             document.getElementById('eredmeny_km_koltseg').textContent = Math.round(km_koltseg).toLocaleString('hu-HU');
             document.getElementById('faq-km-koltseg').textContent = Math.round(km_koltseg).toLocaleString('hu-HU');
