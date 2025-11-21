@@ -57,11 +57,11 @@
         <form>
             <div class="row gx-3 gy-1 mb-5 justify-content-md-center">
                 <div class="col-md-3">
-                    <div class="card rounded-4 h-100">
+                    <div class="card rounded-4 h-100 megvane-card" id="megvane-card-meglevo">
                         <div class="card-body">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="megvane" id="meglevo"
-                                    value="meglevo" checked>
+                                <input class="form-check-input" type="radio" name="megvane" id="meglevo" value="meglevo"
+                                    checked>
                                 <label class="form-check-label fw-bold" for="meglevo">Saját autómra számolok</label>
                             </div>
                             <div class="mt-2 small text-muted">
@@ -71,7 +71,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="card rounded-4 h-100">
+                    <div class="card rounded-4 h-100 megvane-card" id="megvane-card-mostveszem">
                         <div class="card-body">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="megvane" id="mostveszem"
@@ -85,6 +85,10 @@
                     </div>
                 </div>
             </div>
+
+            <p class="text-center text-muted">
+                💡Próbálj meg minél pontosabb adatokat megadni!
+            </p>
 
             <div class="card rounded-4 shadow-sm mb-4">
                 <div class="card-body">
@@ -153,10 +157,11 @@
                         </div>
                     </div>
                     <div class="mb-3" id="futasteljesitmeny_evente_group" style="display: none">
-                        <label for="futasteljesitmeny_evente" class="form-label">Évente hány kilométert tervezel megtenni?</label>
+                        <label for="futasteljesitmeny_evente" class="form-label">Évente hány kilométert tervezel
+                            megtenni?</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="futasteljesitmeny_evente" name="futasteljesitmeny_evente"
-                                value="15000" min="0" step="1000">
+                            <input type="number" class="form-control" id="futasteljesitmeny_evente"
+                                name="futasteljesitmeny_evente" value="15000" min="0" step="1000">
                             <span class="input-group-text">km/év</span>
                         </div>
                     </div>
@@ -209,7 +214,7 @@
                     <label class="form-label d-block mb-2">Casco típus</label>
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <div class="card h-100">
+                            <div class="card h-100 casco-card" id="casco-card-nincs">
                                 <div class="card-body">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="casco_tipus" id="casco_nincs"
@@ -224,7 +229,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card h-100">
+                            <div class="card h-100 casco-card" id="casco-card-alap">
                                 <div class="card-body">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="casco_tipus" id="casco_alap"
@@ -255,7 +260,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card h-100">
+                            <div class="card h-100 casco-card" id="casco-card-teljes">
                                 <div class="card-body">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="casco_tipus"
@@ -517,7 +522,7 @@
                     <label class="form-label d-block mb-2">Otthoni parkolás</label>
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
-                            <div class="card rounded-3 h-100">
+                            <div class="card rounded-3 h-100 parkolas-card" id="parkolas-card-garazs">
                                 <div class="card-body">
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="radio" name="parkolas_tipus"
@@ -535,7 +540,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="card rounded-3 h-100">
+                            <div class="card rounded-3 h-100 parkolas-card" id="parkolas-card-berlet">
                                 <div class="card-body">
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="radio" name="parkolas_tipus"
@@ -621,8 +626,8 @@
                             <span class="fs-3">Ft</span>
                         </p>
                         <div class="text-muted mt-2 fs-small">
-                            Ennyit költesz átlagosan az autódra. Tartalmazza az átlagos használatot és az elmaradt
-                            kamatokat is.
+                            Ennyit költesz átlagosan az autódra. Tartalmazza az átlagos használatot és az
+                            elmaradt kamatokat is. &dagger;
                         </div>
                     </div>
                 </div>
@@ -656,7 +661,7 @@
                         </div>
                         <div class="text-muted fs-small">
                             A következő <b id="megtakaritas_evek" class="fs-5">5</b> évben ennyibe fog neked kerülni az
-                            autózás összesen.
+                            autózás összesen. &Dagger;
                         </div>
                     </div>
                 </div>
@@ -715,16 +720,23 @@
                 </div>
             </div>
 
-            <div class="mt-3">
-                <p>*️⃣ Vedd figyelembe, hogy ezek becsült értékek, és csak annyira pontosak, amennyire pontos számokat
-                    megadtál.</p>
+            <div class="mt-3 text-muted fs-small">
+                <p>
+                    &dagger; Vedd figyelembe, hogy ezek becsült értékek, és csak annyira pontosak, amennyire pontos
+                    számokat megadtál. <br>
+                    &Dagger; A hosszútávú költség mai értéken van kifejezve.
+                </p>
+                <p class="text-center">
+                    <a href="magyarazat.html" class="btn btn-primary">
+                        Magyarázat &rarr;
+                    </a>
+                </p>
             </div>
         </section>
     </div>
 
-    <!-- Magyarázat szekció az oldal alján, empatikusabb stílusban -->
     <div class="container pb-5" style="max-width: 900px; margin: 0 auto;">
-        <section class="mt-4">
+        <section class="mt-3">
             <h5 class="fw-bold mb-3 text-muted">Miért ilyen magasak ezek a költségek?</h5>
             <p class="mb-3">
                 Ha most látod először ezeket a számokat, teljesen érthető, ha meglepődsz, vagy kételkedsz bennük. Sokan
@@ -763,7 +775,7 @@
         </section>
     </div>
 
-    <div class="container mb-4 pb-5" style="max-width: 900px">
+    <div class="container mb-4 pb-5 fw-bold" style="max-width: 900px">
         <section>
             <h4 class="text-muted fw-bold mb-3">Ajánlott cikkek</h4>
             <div>
@@ -850,9 +862,9 @@
             const csere_evek = Number(document.getElementById('csere_evek').value) || 1;
             const futasteljesitmeny = Number(document.getElementById('futasteljesitmeny').value) || 0;
             const ertekvesztes_rata = document.getElementById('hajtas-benzin').checked ? 0.069 :
-            document.getElementById('hajtas-dizel').checked ? 0.079 :
-            document.getElementById('hajtas-hibrid').checked ? 0.061 :
-            0.08 // elektromos
+                document.getElementById('hajtas-dizel').checked ? 0.079 :
+                    document.getElementById('hajtas-hibrid').checked ? 0.061 :
+                        0.08 // elektromos
             const mostveszem = document.getElementById('mostveszem').checked
             const evek = (new Date() - new Date(document.getElementById('vasarlas_datum').value)) / (1000 * 60 * 60 * 24 * 365);
             const ujauto = document.getElementById('ujauto').checked;
@@ -1020,6 +1032,35 @@
             document.getElementById('meglevo').addEventListener('change', updateAutovasarlasMezok);
             document.getElementById('mostveszem').addEventListener('change', updateAutovasarlasMezok);
             updateAutovasarlasMezok();
+        });
+
+        // Primary keret a kiválasztott radio buttonos kártyákra
+        document.addEventListener('DOMContentLoaded', function () {
+            function updateRadioBorders() {
+                // Megvane
+                document.getElementById('megvane-card-meglevo').classList.toggle('border-primary', document.getElementById('meglevo').checked);
+                document.getElementById('megvane-card-mostveszem').classList.toggle('border-primary', document.getElementById('mostveszem').checked);
+
+                // Casco
+                document.getElementById('casco-card-nincs').classList.toggle('border-primary', document.getElementById('casco_nincs').checked);
+                document.getElementById('casco-card-alap').classList.toggle('border-primary', document.getElementById('casco_alap').checked);
+                document.getElementById('casco-card-teljes').classList.toggle('border-primary', document.getElementById('casco_teljes').checked);
+
+                // Parkolás
+                document.getElementById('parkolas-card-garazs').classList.toggle('border-primary', document.getElementById('parkolas_garazs').checked);
+                document.getElementById('parkolas-card-berlet').classList.toggle('border-primary', document.getElementById('parkolas_berlet').checked);
+            }
+
+            // Eseményfigyelők
+            document.getElementById('meglevo').addEventListener('change', updateRadioBorders);
+            document.getElementById('mostveszem').addEventListener('change', updateRadioBorders);
+            document.getElementById('casco_nincs').addEventListener('change', updateRadioBorders);
+            document.getElementById('casco_alap').addEventListener('change', updateRadioBorders);
+            document.getElementById('casco_teljes').addEventListener('change', updateRadioBorders);
+            document.getElementById('parkolas_garazs').addEventListener('change', updateRadioBorders);
+            document.getElementById('parkolas_berlet').addEventListener('change', updateRadioBorders);
+
+            updateRadioBorders();
         });
     </script>
 </body>

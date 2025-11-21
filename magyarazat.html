@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Magyarázat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .grafikon-placeholder {
+            background: #e9ecef;
+            border-radius: 8px;
+            height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 1.2em;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container py-4" style="max-width: 900px;">
+        <h1 class="fw-bold mb-4">Autóköltség kalkuláció magyarázata</h1>
+
+        <section class="section">
+            <h2 class="h4 fw-bold mb-3">Havi költségek lebontása</h2>
+            <p>
+                Az autózás havi költsége a kalkulációban ezekből a kategóriából áll össze:
+            </p>
+            <ul>
+                <li><b>Üzemanyag:</b> tankolás átlagosan</li>
+                <li><b>Karbantartás:</b> szerviz, olajcsere, gumikopás, apróságok</li>
+                <li><b>Parkolás:</b> otthoni és városi parkolási díjak</li>
+                <li><b>Autópálya:</b> matrica, úthasználati díj</li>
+                <li><b>Adók és bírságok:</b> gépjárműadó, átírás, bírságok</li>
+                <li><b>Értékvesztés:</b> az autó vételi és eladási árának különbsége hónapokra elosztva</li>
+                <li><b>Biztosítás:</b> kötelező és casco díjak</li>
+                <li><b>Saját zsebből fizetett károk:</b> havi átlagban</li>
+                <li><b>Extra felszerelés, egyebek:</b> utólagos költések</li>
+                <li><b>Elmaradt kamatok:</b> amit elvesztesz, mert autóban (garázsban) áll a pénzed befektetés helyett
+                </li>
+            </ul>
+            <p>
+                Minden kategória hozzájárul az összes havi költséghez.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2 class="h4 fw-bold mb-3">Értékvesztés</h2>
+            <div class="mb-3 mx-auto text-center" style="max-width: 600px;">
+                <canvas id="ertekvesztesGrafikon" style="width:100%;height:240px;max-width:100%;" height="240"></canvas>
+            </div>
+            <p>
+                Az autó értéke minden évben csökken, ezt nevezzük értékvesztésnek. A kalkulátorban a hajtástípus alapján
+                különböző átlagos éves értékvesztéssel számolunk (nominálisan):
+            </p>
+            <ul>
+                <li>Benzines: <b>6,9%</b> / év</li>
+                <li>Dízel: <b>7,9%</b> / év</li>
+                <li>Hibrid: <b>6,1%</b> / év</li>
+                <li>Elektromos: <b>8%</b> / év</li>
+            </ul>
+            <p>
+                Az értékvesztés számítása: <br>
+                <code>Mai érték = Vételár × (1 - értékvesztés ráta)<sup>évek száma</sup></code>
+            </p>
+            <p>
+                Új autó esetén az első évben további <b>~20%</b> értékvesztéssel számolunk a vásárlás pillanatában.
+            </p>
+            <p>
+                A havi költség számításához az autó teljes megtartási idejére számolt teljes értékvesztést átlagoljuk a
+                hónapokra.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2 class="h4 fw-bold mb-3">Elmaradt kamatok</h2>
+            <p>
+                Amikor autót vagy garázst vásárolsz, a pénzedet lekötöd benne, így lemondasz a lehetséges befektetési
+                hozamokról. Ez az elmaradt kamat, amit a kalkulátor a vételár és a garázs értéke alapján számol, a
+                megadott éves kamatláb és infláció figyelembevételével.
+            </p>
+            <p>
+                Az autó értékére a nominális kamatláb a mérvadó, ugyanis az autó értéke nem követi az inflációt (sőt,
+                csökken a forintban kifejezett értéke, amit az értékvesztésnél figyelembe vettünk).
+            </p>
+            <p>
+                <code>Elmaradt kamat = Vételár × (kamatláb)</code>
+            </p>
+            <p>
+                Az ingatlan (garázs) értéke jellemzően az inflációt követi, ezért ott az inflációval korrigált kamat
+                (reálkamat) amit elvesztesz. Ha már tulajdonodban van a garázs, akkor is van alternatívaköltsége: ha nem
+                lenne autód, kiadhatnád másnak, eladhatnád, átépíthetnéd egy kis lakássá a gyereknek vagy irodává
+                magadnak, stb. Ha csak a kertedben áll az autód, akkor a parkolóhely értéke 10 (20/30) négyzetméternyi
+                kert, amit a kocsibeálló elfoglal. Mennyit fizetnél +30 négyzetméter kertért?
+            </p>
+            <p>
+                <code>Elmaradt kamat = Érték × (kamatláb - infláció)</code>
+            </p>
+            <p>
+                Ez a költség nem jelenik meg számlán, de pénzügyi szempontból ugyanolyan valós veszteség, mint a
+                benzinköltség. A havi elmaradt kamat annyi, amennyit a vételár kamatozna 1 hónap alatt. Itt nem
+                számolunk kamatos kamattal, azt a hosszú távú költségnél vesszük figyelembe.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2 class="h4 fw-bold mb-3">Biztosítás és saját zsebből fizetett károk</h2>
+            <p>
+                Az autó fenntartásának fontos része a kötelező gépjármű-felelősségbiztosítás (KGFB) és a casco. A
+                kalkulátorban mindkettő szerepel, és három casco opcióval számolunk:
+            </p>
+            <ul>
+                <li>
+                    <b>Nincs casco:</b> Ebben az esetben csak a kötelező biztosításod van, ami kizárólag másoknak
+                    okozott károkat téríti meg. Az autódat ért károk (pl. törés, elemi kár, lopás) teljes egészében a te
+                    kockázatod. A kalkulátor évente az autó értékének <b>4%-át</b> számolja el, mint átlagos saját
+                    zsebből fizetett kár. Ez a becslés magában foglalja a kisebb sérüléseket, parkolási horpadásokat,
+                    vandalizmust, természeti károkat, vagy akár a lopást is. Nagyságrendileg hasonló összeg, mintha
+                    cascot kötnél rá.
+
+                    <p>
+                        <code>Kockázat = Érték × 4%</code>
+                    </p>
+                </li>
+                <li>
+                    <b>Alap casco:</b> Ez a biztosítás csak bizonyos károkra fizet (pl. törés, elemi kár), másokra nem
+                    (pl. részleges lopás, vandalizmus, egyes természeti károk). Itt évente az autó értékének
+                    <b>1%-át</b> számoljuk el saját kockázatként. Az önrész azt az értékhatárt jelenti, amit egy kár
+                    esetén minden alkalommal magadnak kell fizetni, mielőtt a biztosító fizetne. Úgy számolunk,
+                    négyévente van olyan károd, amire ezt igénybe kell venned.
+                    <p>
+                        <code>Kockázat = Érték × 1% + Önrész × 1/4</code>
+                    </p>
+                </li>
+                <li>
+                    <b>Teljes casco:</b> Ez a legszélesebb körű védelem, szinte minden kárt megtérít (törés, lopás,
+                    elemi kár, vandalizmus). Itt úgy számolunk, hogy a biztosító szinte
+                    minden kárt fedez, de minden kárnál az önrészt neked kell fizetni. Négyévente egy káreseményt
+                    feltételezünk.
+                    <p>
+                        <code>Kockázat = Önrész × 1/4</code>
+                    </p>
+                </li>
+            </ul>
+            <p>
+                Példák saját zsebből fizetett károkra:
+            </p>
+            <ul>
+                <li>Kisebb karcolások, horpadások, amiket nem éri meg biztosításra jelenteni</li>
+                <li>Parkolás közben keletkezett sérülések, ismeretlen okozóval</li>
+                <li>Vandalizmus (pl. letört tükör, megrongált fényezés)</li>
+                <li>Természeti károk (jégeső, faág ráesik az autóra), amire nem fizet a biztosító</li>
+                <li>Részleges lopás (pl. ellopott rendszámtábla, ablaktörlő, dísztárcsa)</li>
+                <li>Casco önrész: minden kárnál a biztosító csak az önrész feletti összeget téríti meg</li>
+            </ul>
+            <p>
+                A kalkulátorban a biztosítási díjak mellett ezek a várható saját zsebből fizetett károk is szerepelnek,
+                hogy a teljes kockázatot lásd. Fontos, hogy ezek becsült átlagok, a valóságban lehetnek évek, amikor
+                semmilyen kárt nem fizetsz, máskor viszont nagyobb összeg is előfordulhat (pl. karambol). A kockázat és
+                a biztosítások díja is erősen függ a vezetési stílusodtól, a kockázatvállalási szokásaidtól, de az autód
+                műszaki állapotától is. <b>Akkor lesz pontos a számítás, ha kérsz ajánlatot</b> casco biztosításra,
+                például
+                itt: <a href="https://www.netrisk.hu/" target="_blank">netrisk.hu</a>
+            </p>
+            <p>
+                Ha anyagi gondot jelentene egy nagyobb kár kifizetése, érdemes casco biztosítást kötnöd, még ha
+                drágábbnak is tűnik a havidíj. Idős autókra sokszor nem lehet cascot kötni, ilyenkor tegyél félre
+                rendszeresen egy esetleges nagyobb kárra.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2 class="h4 fw-bold mb-3">+1 kilométer díja</h2>
+            <p>
+                Minden további megtett kilométer növeli az autó fenntartási költségét. A kilométerdíj tartalmazza:
+            </p>
+            <ul>
+                <li>Üzemanyag</li>
+                <li>Futásarányos karbantartás (pl. gumikopás, olajcsere)</li>
+                <li>Szervizköltség futásarányos része</li>
+                <li>Saját zsebből fizetett károk futásarányos része</li>
+            </ul>
+            <p>
+                Példa számítás: <br>
+                <code>Km díj = üzemanyag/km + gumikopás/km + olajcsere/km + szerviz/km + kockázat/km</code>
+            </p>
+        </section>
+
+        <section class="section">
+            <h2 class="h4 fw-bold mb-3">Hosszú távú költség</h2>
+            <p>
+                A kalkulátor nemcsak a havi költséget számolja ki, hanem azt is, hogy a következő években összesen
+                mennyibe fog kerülni az autózás. Ez a hosszú távú összeg segít megérteni, milyen pénzügyi terhet jelent
+                az autó fenntartása, és segíthet a tervezésben, például autóváltás előtt.
+            </p>
+            <p>
+                A hosszú távú költség számításánál figyelembe vesszük:
+            </p>
+            <ul>
+                <li>A havi költségek összegét (minden tényezővel együtt: értékvesztés, elmaradt kamat, biztosítás,
+                    karbantartás, üzemanyag, stb.)</li>
+                <li>A választott időtávot (például 5 vagy 10 év)</li>
+                <li>A kamatos kamat hatását: ha a pénzt nem autóra költenéd, hanem befektetnéd, akkor a hozamok is
+                    számítanak. Ezért a kalkulátor a megadott kamatláb és infláció alapján korrigálja az összesített
+                    költséget.</li>
+            </ul>
+            <p>
+                <b>Példa:</b> Ha a havi költséged 120 000 Ft, és 5 évig tartod meg az autót, akkor a teljes költség nem
+                egyszerűen <code>120 000 × 12 × 5 = 7 200 000 Ft</code>, hanem ennél magasabb, mert a pénz alternatív
+                hozamát is elveszíted. A kalkulátor ezt a kamatos kamat képlettel számolja:
+            </p>
+            <p>
+                <code>Teljes költség = havi költség × 12 × ( (1 + kamat - infláció)<sup>évek száma</sup> - 1 ) / (kamat - infláció)</code>
+            </p>
+            <p>
+                Ez az összeg megmutatja, hogy mennyi pénzt "veszítesz" mai értéken az autózás miatt a következő években,
+                ha minden költséget figyelembe veszel. Ha például autóvásárlás előtt állsz, és szeretnél felelősen
+                dönteni, ez az összeg segít reálisan tervezni. Ha a hosszú távú költség túl magas, érdemes átgondolni,
+                hogyan csökkentheted (kevesebb használat, olcsóbb autó, alternatív közlekedés, stb.).
+            </p>
+            <p>
+                Természetesen <b>a közlekedés mindenképpen költséggel jár</b>, akár autót, akár tömegközlekedést, akár
+                kerékpárt használsz elsősorban. A kiszámolt hosszú távú költséget vesd össze a számodra kézenfekvő
+                alternatívákkal: például tömegközlekedés havi bérlet díja, kerékpár fenntartási költsége, vagy
+                autómegosztó szolgáltatások, taxi, házhoz szállítás díjai.
+            </p>
+
+        </section>
+
+        <p class="text-center">
+            <a href="index.html" class="btn btn-primary">
+                &larr; Vissza a kalkulátorhoz
+            </a>
+        </p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Benzines autó értékvesztés grafikon (8M Ft, első év -20%, utána évente -6,9%)
+        const kezdoErtek = 8000000;
+        const elsoEvVesztes = 0.20;
+        const evVesztes = 0.069 + 0.05;
+        const evSzam = 15;
+        let labels = [];
+        let values = [];
+        let ertek = kezdoErtek * (1 - elsoEvVesztes);
+        labels.push("0");
+        values.push(kezdoErtek);
+        labels.push("1");
+        values.push(Math.round(ertek));
+        for (let i = 2; i <= evSzam; i++) {
+            ertek *= (1 - evVesztes);
+            labels.push(i);
+            values.push(Math.round(ertek));
+        }
+        new Chart(document.getElementById('ertekvesztesGrafikon'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Autó értéke (Ft)',
+                    data: values,
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0,123,255,0.1)',
+                    fill: true,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#007bff',
+                    tension: 0.2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Értékvesztés egy 8M forintos új benzines autó esetén (5% inflációval korrigálva)'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => (ctx.parsed.y / 1000000).toLocaleString('hu-HU') + 'M Ft'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: value => (value / 1000000).toLocaleString('hu-HU') + 'M Ft'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
