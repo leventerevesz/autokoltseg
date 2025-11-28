@@ -178,6 +178,37 @@
 
             <div class="card rounded-4 shadow-sm mb-4">
                 <div class="card-body">
+                    <h2 class="card-title fs-4 fw-bold">Hitel</h2>
+                    <div class="mb-3">
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" id="hitel_van" name="hitel_van">
+                            <label class="form-check-label" for="hitel_van">Hitelre vettem az autót</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hitel_onresz" class="form-label">Önrész</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="hitel_onresz" name="hitel_onresz" value="0" min="0"
+                                step="100000">
+                            <span class="input-group-text">Ft</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="torlesztoreszlet" class="form-label">Havi törlesztőrészlet</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="torlesztoreszlet" name="torlesztoreszlet" value="0" min="0"
+                                step="1000">
+                            <span class="input-group-text">Ft/hó</span>
+                        </div>
+                        <div class="form-text text-muted" style="font-size: 0.95em;">
+                            Ha már visszafizetted a hitelt, akkor 0 Ft.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card rounded-4 shadow-sm mb-4">
+                <div class="card-body">
                     <div class="mb-3">
                         <label for="inflacio" class="form-label">Infláció</label>
                         <div class="input-group">
@@ -711,6 +742,10 @@
                                     <td class="text-end"><span id="reszletek-extrak">-</span> Ft</td>
                                 </tr>
                                 <tr>
+                                    <td>Hiteltörlesztés</td>
+                                    <td class="text-end"><span id="reszletek-torleszto">-</span> Ft</td>
+                                </tr>
+                                <tr>
                                     <td>Elmaradt kamatok</td>
                                     <td class="text-end"><span id="reszletek-kamat">-</span> Ft</td>
                                 </tr>
@@ -724,7 +759,7 @@
                 <p>
                     &dagger; Vedd figyelembe, hogy ezek becsült értékek, és csak annyira pontosak, amennyire pontos
                     számokat megadtál. <br>
-                    &Dagger; A hosszútávú költség mai értéken van kifejezve.
+                    &Dagger; Ha továbbra is ugyanennyit költesz havonta. A hosszú távú költség mai értéken van kifejezve.
                 </p>
                 <p class="text-center">
                     <a href="magyarazat.html" class="btn btn-primary">
@@ -912,6 +947,9 @@
             const statisztika_atlagos_futasteljesitmeny_evente = 20000;
             const statisztika_ertekvesztes_km = 0.000002 // 1/km
             const futasteljesitmeny_szorzo = futasteljesitmeny_evente / statisztika_atlagos_futasteljesitmeny_evente;
+            const hitel_van = document.getElementById('hitel_van').checked && Number(document.getElementById('torlesztoreszlet').value) != 0;
+            const hitel_onresz = hitel_van ? (Number(document.getElementById('hitel_onresz').value) || 0) : 0;
+            const hitel_torleszto = hitel_van ? (Number(document.getElementById('torlesztoreszlet').value) || 0) : 0;
 
             // egyszeri költségek
             const atiras = Number(document.getElementById('atiras').value) || 0;
@@ -940,7 +978,7 @@
             const gepjarmuado = Number(document.getElementById('gepjarmuado').value) || 0;
             const muszaki_vizsga = Number(document.getElementById('muszaki_vizsga').value) / 2 || 0;
             const ertekvesztes_eves = vetelar * (1 - Math.pow(1 - ertekvesztes_rata, csere_evek)) / csere_evek;
-            const elmaradt_kamat = vetelar * kamat;
+            const elmaradt_kamat = hitel_van ? hitel_onresz * kamat : vetelar * kamat;
             const szerviz = Number(document.getElementById('szerviz').value) || 0;
             const utdij = Number(document.getElementById('utdij').value) || 0;
             const birsag = Number(document.getElementById('birsag').value) || 0;
@@ -980,7 +1018,8 @@
             const uzemanyag = uzemanyag_km * (futasteljesitmeny_evente / 12);
 
             const havi_koltseg =
-                ertekvesztes + elmaradt_kamatok + biztositasok + karbantartas + parkolas + uzemanyag +
+                ertekvesztes + elmaradt_kamatok + hitel_torleszto + biztositasok +
+                karbantartas + parkolas + uzemanyag +
                 (gepjarmuado + utdij + birsag + biztositatlan_kockazat) / 12 +
                 // átírás költsége a szétosztva annyi hónapra amég megtartod az autót
                 atiras / csere_evek / 12 +
@@ -992,6 +1031,7 @@
             document.getElementById('reszletek-ertekvesztes').textContent = Math.round(ertekvesztes).toLocaleString('hu-HU');
             document.getElementById('reszletek-uzemanyag').textContent = Math.round(uzemanyag).toLocaleString('hu-HU');
             document.getElementById('reszletek-kamat').textContent = Math.round(elmaradt_kamatok).toLocaleString('hu-HU');
+            document.getElementById('reszletek-torleszto').textContent = Math.round(hitel_torleszto).toLocaleString('hu-HU');
             document.getElementById('reszletek-biztositas').textContent = Math.round(biztositasok).toLocaleString('hu-HU');
             document.getElementById('reszletek-biztositanatlan_kockazat').textContent = Math.round(biztositatlan_kockazat / 12).toLocaleString('hu-HU');
             document.getElementById('reszletek-karbantartas').textContent = Math.round(karbantartas).toLocaleString('hu-HU');
