@@ -117,6 +117,19 @@
         </section>
 
         <section class="section">
+            <h2 class="h4 fw-bold mb-3">Vételár</h2>
+            <p>
+                Nem egyszerűen a vételárat osztjuk el X hónapra.
+            </p>
+            <p>
+                Az autót megvetted, valahány év múlva eladod. Mennyibe került ez neked? Úgy számolhatunk, hogy a
+                költséged
+                a vételár és az eladási ár különbsége (értékvesztés), plusz az vételáron elmaradt kamatok. Ez a költség
+                van hónapokra szétosztva.
+            </p>
+        </section>
+
+        <section class="section">
             <h2 class="h4 fw-bold mb-3">Hitel</h2>
             <p>
                 Ha hitelre vásárolsz autót, akkor nyilvánvalóan a törlesztőrészletet havonta fizeted. Ezen felül az
@@ -224,9 +237,7 @@
                 <li>A havi költségek összegét (minden tényezővel együtt: értékvesztés, elmaradt kamat, biztosítás,
                     karbantartás, üzemanyag, stb.)</li>
                 <li>A választott időtávot (például 5 vagy 10 év)</li>
-                <li>A kamatos kamat hatását: ha a pénzt nem autóra költenéd, hanem befektetnéd, akkor a hozamok is
-                    számítanak. Ezért a kalkulátor a megadott kamatláb és infláció alapján korrigálja az összesített
-                    költséget.</li>
+                <li>A kamatos kamat hatását</li>
             </ul>
             <p>
                 <b>Példa:</b> Ha a havi költséged 120 000 Ft, és 5 évig tartod meg az autót, akkor a teljes költség nem
@@ -308,6 +319,12 @@
                     }
                 },
                 scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Évek'
+                        }
+                    },
                     y: {
                         beginAtZero: true,
                         ticks: {
