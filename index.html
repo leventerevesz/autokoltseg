@@ -583,25 +583,28 @@
                     <h2 class="card-title fs-4 fw-bold">Parkolás</h2>
                     <label class="form-label d-block mb-2">Otthoni parkolás</label>
                     <div class="row g-3 mb-4">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="card rounded-3 h-100 parkolas-card" id="parkolas-card-garazs">
                                 <div class="card-body">
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="radio" name="parkolas_tipus"
                                             id="parkolas_garazs" value="garazs" checked>
-                                        <label class="form-check-label fw-bold" for="parkolas_garazs">Saját garázsom
+                                        <label class="form-check-label fw-bold" for="parkolas_garazs">Saját parkolóhelyem
                                             van</label>
                                     </div>
-                                    <label for="garazs_ertek" class="form-label">Garázs értéke</label>
+                                    <label for="garazs_ertek" class="form-label">Garázs vagy kocsibeálló értéke</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control" id="garazs_ertek" name="garazs_ertek"
                                             value="10000000" min="0" step="100000">
                                         <span class="input-group-text">Ft</span>
                                     </div>
+                                    <div class="form-text text-muted" style="font-size: 0.95em;">
+                                        A saját telkednek is van értéke.
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="card rounded-3 h-100 parkolas-card" id="parkolas-card-berlet">
                                 <div class="card-body">
                                     <div class="form-check mb-2">
@@ -615,6 +618,17 @@
                                         <input type="number" class="form-control" id="garazsberlet" name="garazsberlet"
                                             value="20000" min="0" step="1000">
                                         <span class="input-group-text">Ft/hó</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card rounded-3 h-100 parkolas-card" id="parkolas-card-ingyen">
+                                <div class="card-body">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="parkolas_tipus"
+                                            id="parkolas_ingyen" value="ingyen">
+                                        <label class="form-check-label fw-bold" for="parkolas_ingyen">Ingyen parkolok közterületen</label>
                                     </div>
                                 </div>
                             </div>
@@ -1167,6 +1181,7 @@
                 // Parkolás
                 document.getElementById('parkolas-card-garazs').classList.toggle('border-primary', document.getElementById('parkolas_garazs').checked);
                 document.getElementById('parkolas-card-berlet').classList.toggle('border-primary', document.getElementById('parkolas_berlet').checked);
+                document.getElementById('parkolas-card-ingyen').classList.toggle('border-primary', document.getElementById('parkolas_ingyen').checked);
             }
 
             // Eseményfigyelők
@@ -1177,6 +1192,7 @@
             document.getElementById('casco_teljes').addEventListener('change', updateRadioBorders);
             document.getElementById('parkolas_garazs').addEventListener('change', updateRadioBorders);
             document.getElementById('parkolas_berlet').addEventListener('change', updateRadioBorders);
+            document.getElementById('parkolas_ingyen').addEventListener('change', updateRadioBorders);
 
             updateRadioBorders();
         });
