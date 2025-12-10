@@ -794,6 +794,10 @@
                                     <td>Elmaradt kamatok</td>
                                     <td class="text-end"><span id="reszletek-kamat">-</span> Ft</td>
                                 </tr>
+                                <tr class="fw-bold">
+                                    <td>Összesen</td>
+                                    <td class="text-end"><span id="reszletek-osszesen">-</span> Ft</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -1089,6 +1093,7 @@
             document.getElementById('reszletek-autopalya').textContent = Math.round(utdij / 12).toLocaleString('hu-HU');
             document.getElementById('reszletek-adok').textContent = Math.round((gepjarmuado + birsag + atiras / csere_evek) / 12).toLocaleString('hu-HU');
             document.getElementById('reszletek-extrak').textContent = Math.round((extrak + egyeb_koltseg) / evek / 12).toLocaleString('hu-HU');
+            document.getElementById('reszletek-osszesen').textContent = Math.round(havi_koltseg).toLocaleString('hu-HU');
 
             const km_koltseg =
                 gumikopas_km +
