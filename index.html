@@ -703,6 +703,9 @@
                             <span id="eredmeny_havi_koltseg">-</span>
                             <span class="fs-3">Ft</span>
                         </p>
+                        <div class="text-muted fs-small">
+                            <span id="eredmeny_teljes_km_koltseg">-</span> Ft/km
+                        </div>
                         <div class="text-muted mt-2 fs-small">
                             Ennyit költesz átlagosan az autódra. Tartalmazza az átlagos használatot és az
                             elmaradt kamatokat is. &dagger;
@@ -1099,6 +1102,7 @@
 
 
             document.getElementById('eredmeny_havi_koltseg').textContent = Math.round(havi_koltseg).toLocaleString('hu-HU');
+            document.getElementById('eredmeny_teljes_km_koltseg').textContent = Math.round(havi_koltseg / (futasteljesitmeny_evente / 12)).toLocaleString('hu-HU');
             document.getElementById('reszletek-ertekvesztes').textContent = Math.round(ertekvesztes).toLocaleString('hu-HU');
             document.getElementById('reszletek-uzemanyag').textContent = Math.round(uzemanyag).toLocaleString('hu-HU');
             document.getElementById('reszletek-kamat').textContent = Math.round(elmaradt_kamatok).toLocaleString('hu-HU');
