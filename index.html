@@ -1128,7 +1128,9 @@
             // kamatos kamat
             const megtakaritas_evek = Number(document.getElementById('megtakaritas_evek_csuszka')?.value) || evek;
             document.getElementById('megtakaritas_evek').textContent = megtakaritas_evek;
-            const elmaradt_megtakaritas = havi_koltseg * 12 * (Math.pow(1 + realkamatlab, megtakaritas_evek) - 1) / (realkamatlab);
+            const elmaradt_megtakaritas = (Math.abs(realkamatlab) > 0.0001) ?
+                havi_koltseg * 12 * (Math.pow(1 + realkamatlab, megtakaritas_evek) - 1) / (realkamatlab) :
+                havi_koltseg * 12 * megtakaritas_evek;
             document.getElementById('eredmeny_megtakaritas').textContent = (Math.round(elmaradt_megtakaritas / 1000) * 1000).toLocaleString('hu-HU');
 
         }
