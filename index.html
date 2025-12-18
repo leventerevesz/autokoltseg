@@ -650,7 +650,6 @@
                 </div>
             </div>
 
-
             <div class="card rounded-4 shadow-sm mb-4">
                 <div class="card-body">
                     <h2 class="card-title fs-4 fw-bold">Autópálya</h2>
@@ -662,6 +661,28 @@
                     </div>
                 </div>
             </div>
+
+            <div class="card rounded-4 shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="card-title fs-4 fw-bold">Költségtérítés</h2>
+                    <div class="form-check mt-3 mb-3">
+                        <input class="form-check-input" type="checkbox" id="koltsegterites" name="koltsegterites">
+                        <label class="form-check-label" for="koltsegterites">A munkáltatóm fizet költségtérítést</label>
+                    </div>
+                    <div id="koltsegterites_group" style="display: none;">
+                        <label for="koltsegterites_km" class="form-label">Költségtérítés mértéke</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="koltsegterites_km" name="koltsegterites_km" value="15" min="0"
+                            step="1">
+                            <span class="input-group-text">Ft/km</span>
+                        </div>
+                        <div class="form-text text-muted fs-small">
+                            Ezt levonjuk a saját költségeidből.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card rounded-4 shadow-sm mb-4" id="extrak_group">
                 <div class="card-body">
                     <div class="mb-3">
@@ -798,6 +819,10 @@
                                 <tr>
                                     <td>Elmaradt kamatok</td>
                                     <td class="text-end"><span id="reszletek-kamat">-</span> Ft</td>
+                                </tr>
+                                <tr id="reszletek_koltsegterites" style="display: none;">
+                                    <td>Költségtérítés</td>
+                                    <td class="text-end"><span id="reszletek-koltsegterites">-</span> Ft</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1021,6 +1046,7 @@
             const hitel_van = document.getElementById('hitel_van').checked && Number(document.getElementById('torlesztoreszlet').value) != 0;
             const hitel_onresz = hitel_van ? (Number(document.getElementById('hitel_onresz').value) || 0) : 0;
             const hitel_torleszto = hitel_van ? (Number(document.getElementById('torlesztoreszlet').value) || 0) : 0;
+            const koltsegterites_km =  document.getElementById('koltsegterites').checked ? (Number(document.getElementById('koltsegterites_km').value) || 0) : 0;
 
             // egyszeri költségek
             const atiras = Number(document.getElementById('atiras').value) || 0;
@@ -1090,10 +1116,11 @@
             const biztositasok = (biztositas_kotelezo + casco) / 12;
             const parkolas = parkolas_otthon + parkolas_mashol;
             const uzemanyag = uzemanyag_km * (futasteljesitmeny_evente / 12);
+            const koltsegterites = koltsegterites_km * (futasteljesitmeny_evente / 12);
 
             const havi_koltseg =
                 ertekvesztes + elmaradt_kamatok + hitel_torleszto + biztositasok +
-                karbantartas + parkolas + uzemanyag +
+                karbantartas + parkolas + uzemanyag - koltsegterites +
                 (gepjarmuado + utdij + birsag + biztositatlan_kockazat) / 12 +
                 // átírás költsége a szétosztva annyi hónapra amég megtartod az autót
                 atiras / csere_evek / 12 +
@@ -1114,6 +1141,7 @@
             document.getElementById('reszletek-autopalya').textContent = Math.round(utdij / 12).toLocaleString('hu-HU');
             document.getElementById('reszletek-adok').textContent = Math.round((gepjarmuado + birsag + atiras / csere_evek) / 12).toLocaleString('hu-HU');
             document.getElementById('reszletek-extrak').textContent = Math.round((extrak + egyeb_koltseg) / evek / 12).toLocaleString('hu-HU');
+            document.getElementById('reszletek-koltsegterites').textContent = Math.round(koltsegterites).toLocaleString('hu-HU');
 
             const km_koltseg =
                 gumikopas_km +
@@ -1121,7 +1149,8 @@
                 uzemanyag_km +
                 szerviz * 0.8 / (futasteljesitmeny_evente) + // szervizköltség 80%-a futásarányos
                 ertekvesztes_km +
-                biztositatlan_kockazat / futasteljesitmeny_evente;
+                biztositatlan_kockazat / futasteljesitmeny_evente +
+                (- koltsegterites_km); // levonjuk a költségtérítést
             document.getElementById('eredmeny_km_koltseg').textContent = Math.round(km_koltseg).toLocaleString('hu-HU');
             document.getElementById('faq-km-koltseg').textContent = Math.round(km_koltseg).toLocaleString('hu-HU');
 
@@ -1191,6 +1220,17 @@
             }
             document.getElementById('negyevszakos_gumi').addEventListener('change', updateGumiMezok);
             updateGumiMezok();
+        });
+
+        // Költségtérítés checkbox kezelése
+        document.addEventListener('DOMContentLoaded', function () {
+            function updateKoltsegteritesMezo() {
+                const koltsegterites = document.getElementById('koltsegterites').checked;
+                document.getElementById('koltsegterites_group').style.display = koltsegterites ? '' : 'none';
+                document.getElementById('reszletek_koltsegterites').style.display = koltsegterites ? '' : 'none';
+            }
+            document.getElementById('koltsegterites').addEventListener('change', updateKoltsegteritesMezo);
+            updateKoltsegteritesMezo();
         });
 
         // Primary keret a kiválasztott radio buttonos kártyákra
