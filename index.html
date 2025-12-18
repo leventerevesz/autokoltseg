@@ -995,8 +995,9 @@
                     autopalya_fogyasztas.value = 8.5;
                 }
             }
-            document.getElementById('hajtas-elektromos').addEventListener('change', updateUzemanyagAr);
-            // Ha más hajtásra vált, visszaállítható a mező (nem kötelező, csak az elektromosra reagál)
+            document.querySelectorAll('input[name="hajtas"]').forEach(el => {
+                el.addEventListener('change', updateUzemanyagAr);
+            });
         });
 
 
